@@ -1,0 +1,37 @@
+# MyApp build config
+
+[project]
+name    = MyApp
+version = 1.0
+output  = bin/MyApp
+
+[compiler]
+fbc  = fbc
+lang = fb
+
+[sources]
+src/main.bas
+src/utils.bas
+src/graphics.bas
+
+[includes]
+include/
+include/myheader.bi
+vendor/include/
+vendor/SDL/sdl.bi
+
+[libs]
+libs/mylib.a
+
+[links]
+m
+GL
+
+[targets]
+debug   = -g -exx
+release = -O 2
+test    = -g -exx -d TESTING
+
+[hooks]
+pre_build  = echo "Building..."
+post_build = strip bin/MyApp
