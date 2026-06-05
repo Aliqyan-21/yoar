@@ -26,6 +26,10 @@ function generate_makefile(yoarfile_path as string) as integer
   print #of, "CC = " & yc.fbc
 
   '' write sources ''
+  if yc.source_count = 0 then
+    print "[error] no sources defined in Yoarfile"
+    end
+  end if
   print #of, "SOURCES = ";
   for i as integer = 0 to yc.source_count - 1
     print #of, yc.sources(i);
@@ -36,19 +40,43 @@ function generate_makefile(yoarfile_path as string) as integer
   print #of, ""
 
   '' write includes ''
-  print #of, "INCLUDES = ";
-  for i as integer = 0 to yc.include_count - 1
-    print #of, "-i " & yc.includes(i);
-    if i <> yc.include_count - 1 then
-      print #of, " ";
-    end if
-  next
-  print #of, ""
+  if yc.include_count <> 0 then
+    print #of, "INCLUDES = ";
+    for i as integer = 0 to yc.include_count - 1
+      print #of, "-i " & yc.includes(i);
+      if i <> yc.include_count - 1 then
+        print #of, " ";
+      end if
+    next
+    print #of, ""
+  end if
 
-  print #of, "OUTPUT = " & yc.proj_output & "/" & yc.proj_name
+  '' write libs ''
+  if yc.lib_count <> 0 then
+    print #of, "LIBS = ";
+    for i as integer = 0 to yc.lib_count - 1
+      print #of, yc.libs(i);
+      if i <> yc.lib_count - 1 then
+        print #of, " ";
+      end if
+    next
+    print #of, ""
+  end if
 
+  '' write links ''
+  if yc.link_count <> 0 then
+    print #of, "LFLAGS = ";
+    for i as integer = 0 to yc.link_count - 1
+      print #of, "-l" & yc.links(i);
+      if i <> yc.link_count - 1 then
+        print #of, " ";
+      end if
+    next
+    print #of, ""
+  end if
+
+  '' debug, release, test flags ''
   dim as boolean debug = yc.debug <> "", release = yc.release <> "", test = yc.test <> ""
-
   if debug then
     print #of, "DEBUG_FLAGS = " & yc.debug
   end if
@@ -59,25 +87,33 @@ function generate_makefile(yoarfile_path as string) as integer
     print #of, "TEST_FLAGS = " & yc.test
   end if
 
-  print #of, ""
+  '' write output ''
+  print #of, "OUTPUT = " & yc.proj_output & "/" & yc.proj_name & !"\n"
 
+  '' build targets ''
   if debug then
     print #of, "debug: ${SOURCES}"
-    print #of, !"\t${CC} ${DEBUG_FLAGS} ${SOURCES} ${INCLUDES} -x ${OUTPUT}"
+    print #of, !"\t${CC} ${DEBUG_FLAGS} ${SOURCES} ${INCLUDES} ${LIBS} ${LFLAGS} -x ${OUTPUT}"
   end if
 
   if release then
     print #of, "release: ${SOURCES}"
-    print #of, !"\t${CC} ${RELEASE_FLAGS} ${SOURCES} ${INCLUDES} -x ${OUTPUT}"
+    print #of, !"\t${CC} ${RELEASE_FLAGS} ${SOURCES} ${INCLUDES} ${LIBS} ${LFLAGS} -x ${OUTPUT}"
   end if
 
   if test then
     print #of, "test: ${SOURCES}"
-    print #of, !"\t${CC} ${TEST_FLAGS} ${SOURCES} ${INCLUDES} -x ${OUTPUT}"
+    print #of, !"\t${CC} ${TEST_FLAGS} ${SOURCES} ${INCLUDES} ${LIBS} ${LFLAGS} -x ${OUTPUT}"
+  end if
+
+  if (not debug) and (not release) and (not test) then
+    print #of, "all: ${SOURCES}"
+    print #of, !"\t${CC} ${SOURCES} ${INCLUDES} ${LIBS} ${LFLAGS} -x ${OUTPUT}"
   end if
 
   print #of, ""
 
+  '' clean ''
   print #of, "clean: "
   print #of, !"\trm " & yc.proj_output & "/" & yc.proj_name
 

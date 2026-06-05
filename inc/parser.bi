@@ -2,11 +2,11 @@
 
 Type YoarConfig
   ' [project]
-  proj_name as string
+  proj_name as string = "main"
   proj_output as string = "."
 
   ' [compiler]
-  fbc as string
+  fbc as string = "fbc"
 
   ' [sources] // fixed array is there for now
   sources(64) as string
