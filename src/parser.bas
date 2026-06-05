@@ -1,28 +1,77 @@
-'' yoarfile parser
+#include "parser.bi"
 
-Type YoarConfig
-  ' [project]
-  proj_name as string
-  proj_version as string
-  proj_output as string
+function parse_yoar_file(filename as string, config as YoarConfig) as Integer
+  dim cfg as ubyte
+  cfg = freefile
+  err = open(filename for input as #cfg)
+  if err <> 0 then
+    print("file not found: " & filename)
+    return 0
+  end if
 
-  ' [compiler]
-  fbc as string
-  lang as string
+  dim as string ln, cs ' current section '
+  do while not eof(cfg)
+    line input #cfg, ln
 
-  ' [sources] // fixed array is there for now
-  sources(64) as string
-  source_count as integer
+    '' data cleaning ''
+    ln = trim(ln)
+    if (ln = "" or left(ln, 1) = "#") then
+      continue do
+    end if
 
-  ' [includes]
-  includes(64) as string
-  include_count as integer
+    if (left(ln, 1) = "[" and right(ln,1) = "]") then
+      cs = trim((lcase(mid(ln, 2, len(ln) - 2))))
+      continue do
+    end if
 
-  ' [libs]
-  libs(32) as string
-  lib_count as integer
+    select case cs
+      /'
+      so this case handles those section in which there
+      is key value pair like this key = value
+      '/
+      case "project", "compiler", "targets", "hooks"
+        dim as integer eqpos = instr(ln, "=")
+        if (eqpos) then
+          dim as string key = trim(left(ln, eqpos -1))
+          dim as string value = trim(mid(ln, eqpos + 1))
 
-  ' [links]
-  links(32) as string
-  link_count as integer
-end type
+          select case cs
+            case "project"
+              if key = "name" then config.proj_name = value
+              if key = "output" then config.proj_output = value
+            case "compiler"
+              if key = "fbc" then config.fbc = value
+            case "targets"
+              if key = "debug" then config.debug = value
+              if key = "release" then config.release = value
+              if key = "test" then config.test = value
+            case "hooks"
+              if key = "pre_build" then config.pre_build = value
+              if key = "post_build" then config.post_build = value
+          end select
+        end if
+
+      /'
+      this case handles those section in which there
+      are just values and no key-value pair
+      '/
+      case "sources"
+        config.sources(config.source_count) = ln
+        config.source_count += 1
+      case "includes"
+        config.includes(config.include_count) = ln
+        config.include_count += 1
+      case "libs"
+        config.libs(config.lib_count) = ln
+        config.lib_count += 1
+      case "links"
+        config.links(config.link_count) = ln
+        config.link_count += 1
+    end select
+
+    ' print ln
+  loop
+
+  close #cfg
+  return 1
+end function
