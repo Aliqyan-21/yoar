@@ -16,9 +16,8 @@ src/graphics.bas
 
 [includes]
 include/
-include/myheader.bi
 vendor/include/
-vendor/SDL/sdl.bi
+vendor/SDL/
 
 [libs]
 libs/mylib.a
