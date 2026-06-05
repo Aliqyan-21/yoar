@@ -93,25 +93,45 @@ function generate_makefile(yoarfile_path as string) as integer
   '' build targets ''
   if debug then
     print #of, "debug: ${SOURCES}"
+    if yc.pre_build <> "" then print #of, !"\t@$(MAKE) pre_build"
     print #of, !"\t${CC} ${DEBUG_FLAGS} ${SOURCES} ${INCLUDES} ${LIBS} ${LFLAGS} -x ${OUTPUT}"
+    if yc.post_build <> "" then print #of, !"\t@$(MAKE) post_build"
   end if
 
   if release then
     print #of, "release: ${SOURCES}"
+    if yc.pre_build <> "" then print #of, !"\t@$(MAKE) pre_build"
     print #of, !"\t${CC} ${RELEASE_FLAGS} ${SOURCES} ${INCLUDES} ${LIBS} ${LFLAGS} -x ${OUTPUT}"
+    if yc.post_build <> "" then print #of, !"\t@$(MAKE) post_build"
   end if
 
   if test then
     print #of, "test: ${SOURCES}"
+    if yc.pre_build <> "" then print #of, !"\t@$(MAKE) pre_build"
     print #of, !"\t${CC} ${TEST_FLAGS} ${SOURCES} ${INCLUDES} ${LIBS} ${LFLAGS} -x ${OUTPUT}"
+    if yc.post_build <> "" then print #of, !"\t@$(MAKE) post_build"
   end if
 
   if (not debug) and (not release) and (not test) then
     print #of, "all: ${SOURCES}"
+    if yc.pre_build <> "" then print #of, !"\t@$(MAKE) pre_build"
     print #of, !"\t${CC} ${SOURCES} ${INCLUDES} ${LIBS} ${LFLAGS} -x ${OUTPUT}"
+    if yc.post_build <> "" then print #of, !"\t@$(MAKE) post_build"
   end if
 
   print #of, ""
+
+  if yc.pre_build <> "" then
+    print #of, "pre_build:"
+    print #of, !"\t" & yc.pre_build
+    print #of, ""
+  end if
+
+  if yc.post_build <> "" then
+    print #of, "post_build:"
+    print #of, !"\t" & yc.post_build
+    print #of, ""
+  end if
 
   '' clean ''
   print #of, "clean: "
