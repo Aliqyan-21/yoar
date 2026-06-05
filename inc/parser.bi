@@ -24,6 +24,16 @@ Type YoarConfig
   ' [links]
   links(32) as string
   link_count as integer
+
+  ' [targets]
+  debug as string
+  release as string
+  test as string
+
+
+  ' [hooks]
+  pre_build as string
+  post_build as string
 end type
 
 declare function parse_yoar_file(filename as string, config as YoarConfig) as Integer

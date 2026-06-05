@@ -20,9 +20,44 @@ function parse_yoar_file(filename as string, config as YoarConfig) as Integer
     end if
 
     if (left(ln, 1) = "[" and right(ln,1) = "]") then
-      cs = mid(ln, 2, len(ln) - 2)
-      print "found section: " & cs
+      cs = trim((lcase(mid(ln, 2, len(ln) - 2))))
+      continue do
     end if
+
+    select case cs
+      /'
+      so this case handles those section in which there
+      is key value pair like this key = value
+      '/
+      case "project", "compiler", "targets", "hooks"
+        dim as integer eqpos = instr(ln, "=")
+        if (eqpos) then
+          dim as string key = trim(left(ln, eqpos -1))
+          dim as string value = trim(mid(ln, eqpos + 1))
+
+          select case cs
+            case "project"
+              if key = "name" then config.proj_name = value
+              if key = "version" then config.proj_version = value
+              if key = "output" then config.proj_output = value
+            case "compiler"
+              if key = "fbc" then config.fbc = value
+            case "targets"
+              if key = "debug" then config.debug = value
+              if key = "release" then config.release = value
+              if key = "test" then config.test = value
+            case "hooks"
+              if key = "pre_build" then config.pre_build = value
+              if key = "post_build" then config.post_build = value
+          end select
+        end if
+
+      /'
+      this case handles those section in which there
+      are just values and no key-value pair
+      '/
+      case "sources", "includes", "libs", "libs"
+    end select
 
     ' print ln
   loop
