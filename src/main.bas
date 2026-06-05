@@ -1,4 +1,4 @@
-#include "src/parser.bi"
+#include "parser.bi"
 
 dim yc as YoarConfig
 dim res as integer

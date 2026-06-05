@@ -1,9 +1,10 @@
 C = fbc
 FLAGS = -w all -g
-SOURCES = src/parser.bas main.bas
+INCLUDES = -i inc
+SOURCES = src/parser.bas src/main.bas
 
 yoar : ${SOURCES}
-	${C} ${FLAGS} ${SOURCES} -x yoar
+	${C} ${FLAGS} ${SOURCES} ${INCLUDES} -x yoar
 
 clean :
 	@rm yoar
