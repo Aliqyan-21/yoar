@@ -26,9 +26,9 @@ m
 GL
 
 [targets]
-debug   = -g -exx
-release = -O 2
-test    = -g -exx -d TESTING
+debug   = -g -w all -exx
+release = -w all -O 2
+test    = -w all -g -exx -d TESTING
 
 [hooks]
 pre_build  = echo "Building..."
