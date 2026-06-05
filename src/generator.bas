@@ -134,8 +134,14 @@ function generate_makefile(yoarfile_path as string) as integer
   end if
 
   '' clean ''
-  print #of, "clean: "
+  print #of, "clean:"
   print #of, !"\trm " & yc.proj_output & "/" & yc.proj_name
+
+  print #of, ""
+
+  '' run ''
+  print #of, "run:"
+  print #of, !"\t./" & yc.proj_output & "/" & yc.proj_name
 
   return 1
 end function
