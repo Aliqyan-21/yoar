@@ -11,11 +11,11 @@ Type YoarConfig
 
   ' [sources] // fixed array is there for now
   sources(64) as string
-  source_count as integer
+  source_count as integer = 0
 
   ' [includes]
   includes(64) as string
-  include_count as integer
+  include_count as integer = 0
 
   ' [libs]
   libs(32) as string

@@ -56,7 +56,18 @@ function parse_yoar_file(filename as string, config as YoarConfig) as Integer
       this case handles those section in which there
       are just values and no key-value pair
       '/
-      case "sources", "includes", "libs", "libs"
+      case "sources"
+        config.sources(config.source_count) = ln
+        config.source_count += 1
+      case "includes"
+        config.includes(config.include_count) = ln
+        config.include_count += 1
+      case "libs"
+        config.libs(config.lib_count) = ln
+        config.lib_count += 1
+      case "links"
+        config.links(config.link_count) = ln
+        config.link_count += 1
     end select
 
     ' print ln
