@@ -1,34 +1,20 @@
 # MyApp build config
 
 [project]
-name    = MyApp
+name    = yoar
 output  = bin
 
 [compiler]
 fbc  = fbc
 
 [sources]
+src/parser.bas
+src/generator.bas
 src/main.bas
-src/utils.bas
-src/graphics.bas
 
 [includes]
-include/
-vendor/include/
-vendor/SDL/
-
-[libs]
-libs/mylib.a
-
-[links]
-m
-GL
+inc
 
 [targets]
 debug   = -g -w all -exx
 release = -w all -O 2
-test    = -w all -g -exx -d TESTING
-
-[hooks]
-pre_build  = echo "Building..."
-post_build = strip bin/MyApp

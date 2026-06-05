@@ -1,6 +1,6 @@
 #include "generator.bi"
 
-function generate_makefile(yoarfile_path as string) as integer
+function generate_makefile(yoarfile_path as string, base_dir as string) as integer
   dim yc as YoarConfig
   dim res as integer
 
@@ -32,7 +32,7 @@ function generate_makefile(yoarfile_path as string) as integer
   end if
   print #of, "SOURCES = ";
   for i as integer = 0 to yc.source_count - 1
-    print #of, yc.sources(i);
+    print #of, base_dir & "/" & yc.sources(i);
     if i <> yc.source_count - 1 then
       print #of, " ";
     end if
@@ -43,7 +43,7 @@ function generate_makefile(yoarfile_path as string) as integer
   if yc.include_count <> 0 then
     print #of, "INCLUDES = ";
     for i as integer = 0 to yc.include_count - 1
-      print #of, "-i " & yc.includes(i);
+      print #of, "-i " & base_dir & "/" & yc.includes(i);
       if i <> yc.include_count - 1 then
         print #of, " ";
       end if
@@ -93,6 +93,7 @@ function generate_makefile(yoarfile_path as string) as integer
   '' build targets ''
   if debug then
     print #of, "debug: ${SOURCES}"
+    print #of, !"\tmkdir -p " & yc.proj_output
     if yc.pre_build <> "" then print #of, !"\t@$(MAKE) pre_build"
     print #of, !"\t${CC} ${DEBUG_FLAGS} ${SOURCES} ${INCLUDES} ${LIBS} ${LFLAGS} -x ${OUTPUT}"
     if yc.post_build <> "" then print #of, !"\t@$(MAKE) post_build"
@@ -100,6 +101,7 @@ function generate_makefile(yoarfile_path as string) as integer
 
   if release then
     print #of, "release: ${SOURCES}"
+    print #of, !"\tmkdir -p " & yc.proj_output
     if yc.pre_build <> "" then print #of, !"\t@$(MAKE) pre_build"
     print #of, !"\t${CC} ${RELEASE_FLAGS} ${SOURCES} ${INCLUDES} ${LIBS} ${LFLAGS} -x ${OUTPUT}"
     if yc.post_build <> "" then print #of, !"\t@$(MAKE) post_build"
@@ -107,6 +109,7 @@ function generate_makefile(yoarfile_path as string) as integer
 
   if test then
     print #of, "test: ${SOURCES}"
+    print #of, !"\tmkdir -p " & yc.proj_output
     if yc.pre_build <> "" then print #of, !"\t@$(MAKE) pre_build"
     print #of, !"\t${CC} ${TEST_FLAGS} ${SOURCES} ${INCLUDES} ${LIBS} ${LFLAGS} -x ${OUTPUT}"
     if yc.post_build <> "" then print #of, !"\t@$(MAKE) post_build"
