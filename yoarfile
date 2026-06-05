@@ -7,7 +7,6 @@ output  = bin/MyApp
 
 [compiler]
 fbc  = fbc
-lang = fb
 
 [sources]
 src/main.bas

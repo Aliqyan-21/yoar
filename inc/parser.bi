@@ -8,7 +8,6 @@ Type YoarConfig
 
   ' [compiler]
   fbc as string
-  lang as string
 
   ' [sources] // fixed array is there for now
   sources(64) as string
