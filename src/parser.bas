@@ -9,10 +9,22 @@ function parse_yoar_file(filename as string, config as YoarConfig) as Integer
     return 0
   end if
 
-  dim ln as string
+  dim as string ln, cs ' current section '
   do while not eof(cfg)
-    input #cfg, ln
-    print ln
+    line input #cfg, ln
+
+    '' data cleaning ''
+    ln = trim(ln)
+    if (ln = "" or left(ln, 1) = "#") then
+      continue do
+    end if
+
+    if (left(ln, 1) = "[" and right(ln,1) = "]") then
+      cs = mid(ln, 2, len(ln) - 2)
+      print "found section: " & cs
+    end if
+
+    ' print ln
   loop
 
   close #cfg
