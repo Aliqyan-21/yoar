@@ -3,8 +3,7 @@
 Type YoarConfig
   ' [project]
   proj_name as string
-  proj_version as string
-  proj_output as string
+  proj_output as string = "."
 
   ' [compiler]
   fbc as string

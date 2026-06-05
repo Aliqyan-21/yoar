@@ -38,7 +38,6 @@ function parse_yoar_file(filename as string, config as YoarConfig) as Integer
           select case cs
             case "project"
               if key = "name" then config.proj_name = value
-              if key = "version" then config.proj_version = value
               if key = "output" then config.proj_output = value
             case "compiler"
               if key = "fbc" then config.fbc = value

@@ -2,8 +2,7 @@
 
 [project]
 name    = MyApp
-version = 1.0
-output  = bin/MyApp
+output  = bin
 
 [compiler]
 fbc  = fbc
