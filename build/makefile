@@ -19,3 +19,6 @@ clean:
 
 run:
 	./bin/yoar
+
+makefile: ../yoarfile
+	yoar ..

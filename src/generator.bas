@@ -146,5 +146,11 @@ function generate_makefile(yoarfile_path as string, base_dir as string) as integ
   print #of, "run:"
   print #of, !"\t./" & yc.proj_output & "/" & yc.proj_name
 
+  print #of, ""
+
+  '' run yoar when yoarfile changes ''
+  print #of, "makefile: " & yoarfile_path
+  print #of, !"\tyoar " & base_dir
+
   return 1
 end function
