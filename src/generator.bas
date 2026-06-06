@@ -1,6 +1,6 @@
 #include "generator.bi"
 
-function generate_makefile(yoarfile_path as string, base_dir as string) as integer
+function generate_makefile(yoarfile_path as string, base_dir as string, target as string) as integer
   dim yc as YoarConfig
   dim res as integer
 
@@ -75,52 +75,27 @@ function generate_makefile(yoarfile_path as string, base_dir as string) as integ
     print #of, ""
   end if
 
-  '' debug, release, test flags ''
-  dim as boolean debug = yc.debug <> "", release = yc.release <> "", test = yc.test <> ""
-  if debug then
-    print #of, "DEBUG_FLAGS = " & yc.debug
-  end if
-  if  release then
-    print #of, "RELEASE_FLAGS = " & yc.release
-  end if
-  if  test then
-    print #of, "TEST_FLAGS = " & yc.test
-  end if
+  '' build targets ''
+  select case target
+    case "release"
+      print #of, "FLAGS = " & yc.release
+    case "debug"
+      print #of, "FLAGS = " & yc.debug
+    case "test"
+      print #of, "FLAGS = " & yc.test
+    case else
+      print "unkown target: " & target
+      return 0
+  end select
 
   '' write output ''
   print #of, "OUTPUT = " & yc.proj_output & "/" & yc.proj_name & !"\n"
 
-  '' build targets ''
-  if debug then
-    print #of, "debug: ${SOURCES}"
-    print #of, !"\tmkdir -p " & yc.proj_output
-    if yc.pre_build <> "" then print #of, !"\t@$(MAKE) pre_build"
-    print #of, !"\t${CC} ${DEBUG_FLAGS} ${SOURCES} ${INCLUDES} ${LIBS} ${LFLAGS} -x ${OUTPUT}"
-    if yc.post_build <> "" then print #of, !"\t@$(MAKE) post_build"
-  end if
-
-  if release then
-    print #of, "release: ${SOURCES}"
-    print #of, !"\tmkdir -p " & yc.proj_output
-    if yc.pre_build <> "" then print #of, !"\t@$(MAKE) pre_build"
-    print #of, !"\t${CC} ${RELEASE_FLAGS} ${SOURCES} ${INCLUDES} ${LIBS} ${LFLAGS} -x ${OUTPUT}"
-    if yc.post_build <> "" then print #of, !"\t@$(MAKE) post_build"
-  end if
-
-  if test then
-    print #of, "test: ${SOURCES}"
-    print #of, !"\tmkdir -p " & yc.proj_output
-    if yc.pre_build <> "" then print #of, !"\t@$(MAKE) pre_build"
-    print #of, !"\t${CC} ${TEST_FLAGS} ${SOURCES} ${INCLUDES} ${LIBS} ${LFLAGS} -x ${OUTPUT}"
-    if yc.post_build <> "" then print #of, !"\t@$(MAKE) post_build"
-  end if
-
-  if (not debug) and (not release) and (not test) then
-    print #of, "all: ${SOURCES}"
-    if yc.pre_build <> "" then print #of, !"\t@$(MAKE) pre_build"
-    print #of, !"\t${CC} ${SOURCES} ${INCLUDES} ${LIBS} ${LFLAGS} -x ${OUTPUT}"
-    if yc.post_build <> "" then print #of, !"\t@$(MAKE) post_build"
-  end if
+  print #of, "${OUTPUT}: ${SOURCES}"
+  print #of, !"\tmkdir -p " & yc.proj_output
+  if yc.pre_build <> "" then print #of, !"\t@$(MAKE) pre_build"
+  print #of, !"\t${CC} ${FLAGS} ${SOURCES} ${INCLUDES} ${LIBS} ${LFLAGS} -x ${OUTPUT}"
+  if yc.post_build <> "" then print #of, !"\t@$(MAKE) post_build"
 
   print #of, ""
 
