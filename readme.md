@@ -26,6 +26,9 @@ make
 ./yoar --help
 ```
 
+4. **Write yoarfile**
+Take a look at [example](example/yoarfile) to see sample yoarfile
+
 ### Todo
 
 version protos:
