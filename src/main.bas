@@ -1,5 +1,6 @@
 #include "generator.bi"
 #include "utils.bi"
+#include "scanner.bi"
 
 sub main(argc as integer, argv as zstring ptr ptr)
     dim args as Cargs = parse_args(argc, argv)
