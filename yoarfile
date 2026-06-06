@@ -11,6 +11,7 @@ fbc  = fbc
 src/main.bas
 src/utils.bas
 src/parser.bas
+src/scanner.bas
 src/generator.bas
 
 [includes]
