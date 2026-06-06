@@ -1,18 +1,16 @@
 #include "generator.bi"
+#include "utils.bi"
 
-sub main()
-    dim base_dir as string
+sub main(argc as integer, argv as zstring ptr ptr)
+    dim args as Cargs = parse_args(argc, argv)
+
+    print "target = " & args.target
+    print "searching yoarfile at = " & args.base_dir & "/"
+
     dim path as string
+    path = args.base_dir & "/yoarfile"
 
-    if command(1) <> "" then
-        base_dir = command(1)
-    else
-        base_dir = "."
-    end if
-
-    path = base_dir & "/yoarfile"
-
-    if generate_makefile(path, base_dir) then
+    if generate_makefile(path, args.base_dir, args.target) then
         print "yoar: makefile generated successfully"
     else
         print "yoar: failed"
@@ -20,4 +18,4 @@ sub main()
     end if
 end sub
 
-main()
+main(__FB_ARGC__, __FB_ARGV__)
