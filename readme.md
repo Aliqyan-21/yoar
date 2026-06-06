@@ -3,7 +3,7 @@
 Build system for free basic.
 Cmake like build system, though not completely cmake.
 
-#### goals:
+#### features:
 - write your config in yoarfile (ini style)
 - build, include, linking.
 - incremental build
@@ -31,14 +31,5 @@ Take a look at [example](example/yoarfile) to see sample yoarfile
 
 ### Todo
 
-version protos:
-- [x] Makefile generation
-- [x] Auto re-run on Yoarfile change
-- [x] Target selection (-t debug/release)
-- [x] Basic incremental (skip if nothing changed)
-
-version defteros:
-- [ ] Per-file compilation (.o objects)
-- [ ] True incremental builds
-- [ ] Percentage display
-- [ ] Dependency scanner (#include tracking)
+- [ ] better code...(forever venture)
+- [ ] windows support
