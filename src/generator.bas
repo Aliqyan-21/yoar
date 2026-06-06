@@ -1,4 +1,5 @@
 #include "generator.bi"
+#include "utils.bi"
 
 function generate_makefile(yoarfile_path as string, base_dir as string, target as string) as integer
   dim yc as YoarConfig
@@ -25,19 +26,17 @@ function generate_makefile(yoarfile_path as string, base_dir as string, target a
 
   print #of, "CC = " & yc.fbc
 
-  '' write sources ''
+  '' write objects ''
+  print #of, "OBJECTS = ";
   if yc.source_count = 0 then
     print "[error] no sources defined in Yoarfile"
     end
   end if
-  print #of, "SOURCES = ";
   for i as integer = 0 to yc.source_count - 1
-    print #of, base_dir & "/" & yc.sources(i);
-    if i <> yc.source_count - 1 then
-      print #of, " ";
-    end if
+    print #of, "obj/" & basename(yc.sources(i)) & ".o";
+    if i <> yc.source_count - 1 then print #of, " ";
   next
-  print #of, ""
+  print #of, !"\n"
 
   '' write includes ''
   if yc.include_count <> 0 then
@@ -91,13 +90,29 @@ function generate_makefile(yoarfile_path as string, base_dir as string, target a
   '' write output ''
   print #of, "OUTPUT = " & yc.proj_output & "/" & yc.proj_name & !"\n"
 
-  print #of, "${OUTPUT}: ${SOURCES}"
-  print #of, !"\tmkdir -p " & yc.proj_output
-  if yc.pre_build <> "" then print #of, !"\t@$(MAKE) pre_build"
-  print #of, !"\t${CC} ${FLAGS} ${SOURCES} ${INCLUDES} ${LIBS} ${LFLAGS} -x ${OUTPUT}"
-  if yc.post_build <> "" then print #of, !"\t@$(MAKE) post_build"
-
+  '' all rule ''
+  print #of, "all: ${OUTPUT}"
   print #of, ""
+  print #of, "${OUTPUT}: ${OBJECTS}"
+  print #of, !"\t@mkdir -p " & yc.proj_output
+  if yc.pre_build <> "" then print #of, !"\t@$(MAKE) pre_build"
+  print #of, !"\t${CC} ${FLAGS} ${OBJECTS} ${LIBS} ${LFLAGS} -x ${OUTPUT}"
+  if yc.post_build <> "" then print #of, !"\t@$(MAKE) post_build"
+  print #of, ""
+
+  '' per file compilation rule ''
+  for i as integer = 0 to yc.source_count - 1
+    var src = base_dir & "/" & yc.sources(i)
+    var obj = "obj/" & basename(yc.sources(i)) & ".o"
+    print #of, obj & ": " & src
+    print #of, !"\t@mkdir -p obj"
+    if i = 0 then
+    print #of, !"\t${CC} ${FLAGS} ${INCLUDES} -m " & basename(yc.sources(i)) & " -c " & src & " -o " & obj
+    else
+    print #of, !"\t${CC} ${FLAGS} ${INCLUDES} -c " & src & " -o " & obj
+    end if
+    print #of, ""
+  next
 
   if yc.pre_build <> "" then
     print #of, "pre_build:"
