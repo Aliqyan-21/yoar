@@ -8,9 +8,10 @@ output  = bin
 fbc  = fbc
 
 [sources]
+src/main.bas
+src/utils.bas
 src/parser.bas
 src/generator.bas
-src/main.bas
 
 [includes]
 inc
