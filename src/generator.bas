@@ -1,5 +1,6 @@
 #include "generator.bi"
 #include "utils.bi"
+#include "scanner.bi"
 
 function generate_makefile(yoarfile_path as string, base_dir as string, target as string) as integer
   dim yc as YoarConfig
@@ -104,7 +105,19 @@ function generate_makefile(yoarfile_path as string, base_dir as string, target a
   for i as integer = 0 to yc.source_count - 1
     var src = base_dir & "/" & yc.sources(i)
     var obj = "obj/" & basename(yc.sources(i)) & ".o"
-    print #of, obj & ": " & src
+
+    '' rule with include dependency ''
+    var includes_flags = ""
+    for j as integer = 0 to yc.include_count - 1
+      includes_flags &= "-i " & base_dir & "/" & yc.includes(j) & " "
+    next
+    var sp = scan_includes(src, yc.fbc, includes_flags)
+    print #of, obj & ": " & src;
+    for j as integer = 0 to sp.include_count - 1
+      print #of, " "  & sp.includes(j);
+    next
+    print #of, ""
+
     print #of, !"\t@mkdir -p obj"
     if i = 0 then
     print #of, !"\t${CC} ${FLAGS} ${INCLUDES} -m " & basename(yc.sources(i)) & " -c " & src & " -o " & obj
