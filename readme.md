@@ -12,7 +12,11 @@ Cmake like build system, though not completely cmake.
 
 ### Yoar builds with Yoar
 
-![ss](assets/ss.png)
+<p>
+  <kbd>
+    <img src="assets/ss.png" alt="Yoar build system in action" width="500">
+  </kbd>
+</p>
 
 ### Get started
 
