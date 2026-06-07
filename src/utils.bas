@@ -6,6 +6,7 @@ sub usage(prog as string)
   print "  --target, -t       : specify build target (default: release)"
   print "  --version, -v      : display program version and quit"
   print "  --help, -h         : show this help message and quit"
+  print "  --init             : initialize a yoarfile template"
   end 0
 end sub
 

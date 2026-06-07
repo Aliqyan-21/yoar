@@ -6,7 +6,7 @@ type Cargs
     version  as boolean = false
 end type
 
-const yoar_version as string = "V0.0.2 - defteros"
+const yoar_version as string = "V0.0.3 - tritos"
 
 declare function parse_args(argc as integer, argv as zstring ptr ptr) as Cargs
 declare sub usage(prog as string)
