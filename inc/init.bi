@@ -28,3 +28,5 @@ const template as string = _
     !"[hooks]\n" _
     !"# pre_build  = echo \"Building...\"\n" _
     !"# post_build = strip bin/MyApp\n"
+
+declare sub yoar_init()
