@@ -14,14 +14,16 @@ function parse_args(argc as integer, argv as zstring ptr ptr) as Cargs
 
   for i as integer = 1 to argc - 1
     dim arg as string = *argv[i]
+    arg = trim(arg)
     if ((arg = "--target" or arg = "-t") and ((i + 1) < argc)) then
       args.target = *argv[i+1]
       i+=1
-    elseif ((arg = "--version" or arg = "-v") and (i < argc)) then
-      print "Version: " & yoar_version
-      end 0
-    elseif ((arg = "--help" or arg = "-h") and (i < argc)) then
-      usage(*argv[0])
+    elseif arg = "--init" then
+      args.init = true
+    elseif arg = "--help" or arg = "-h" then
+      args.help = true
+    elseif arg = "--version" or arg = "-v" then
+      args.version = true
     else
       args.base_dir = *argv[i]
     end if

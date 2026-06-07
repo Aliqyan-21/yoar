@@ -14,6 +14,11 @@ function parse_yoar_file(filename as string, config as YoarConfig) as Integer
     line input #cfg, ln
 
     '' data cleaning ''
+    ' strip inline comments '
+    var hpos = instr(ln , " #")
+    if hpos > 0 then
+      ln = trim(left(ln, hpos - 1))
+    end if
     ln = trim(ln)
     if (ln = "" or left(ln, 1) = "#") then
       continue do
