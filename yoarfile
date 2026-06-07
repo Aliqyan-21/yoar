@@ -13,6 +13,7 @@ src/utils.bas
 src/parser.bas
 src/scanner.bas
 src/generator.bas
+src/init.bas
 
 [includes]
 inc
