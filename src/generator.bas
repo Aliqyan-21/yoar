@@ -124,7 +124,13 @@ function generate_makefile(yoarfile_path as string, base_dir as string, target a
 
     var current = i + 1
     var total = yc.source_count
-    var progress = "[" & str(current) &  "/" & str(total) & "]"
+    var pct = str(cint((current*100)/total))
+    ' aligning right in 4 chars: "  1%", " 10%", "100%"
+    do while len(pct) < 4
+      pct = " " & pct
+    loop
+    var progress = "[" & pct & "]"
+    ' var progress = "[" & str(current) &  "/" & str(total) & "]"
 
     print #of, obj & ": " & src;
     for j as integer = 0 to sp.include_count - 1
