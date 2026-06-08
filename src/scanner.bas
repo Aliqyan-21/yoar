@@ -3,15 +3,14 @@
 ' extract #include "utils.bi" from file '
 function scan_includes(filepath as string, fbc as string, includes_flags as string) as ScanPut
   dim sp as ScanPut
-  dim tmp as string = "/tmp/yoar_deps.txt"
+  dim tmp as string = ".yoar_deps.txt"
+  dim tmpo as string = ".yoar_tmp.o"
 
-  shell fbc & " -showincludes " & includes_flags & " -c " & filepath & " -o /tmp/yoar_tmp.o > " & tmp & " 2>&1"
+  shell fbc & " -showincludes " & includes_flags _
+    & " -c " & filepath & " -o /tmp/yoar_tmp.o > " & tmpo & " 2>&1"
 
   dim inf as ubyte = freefile
-  if open(tmp for input as #inf) <> 0 then
-    print("file not found: " & filepath)
-    end 1
-  end if
+  if open(tmp for input as #inf) <> 0 then return sp
 
   dim ln as string
   do while not eof(inf)
@@ -25,5 +24,10 @@ function scan_includes(filepath as string, fbc as string, includes_flags as stri
   loop
 
   close #inf
+
+  '' cleanup the tmp files created ''
+  kill tmp
+  kill tmpo
+
   return sp
 end function
