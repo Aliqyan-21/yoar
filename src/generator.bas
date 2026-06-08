@@ -15,6 +15,13 @@ function generate_makefile(yoarfile_path as string, base_dir as string, target a
 
   print "parsed successfully"
 
+  if yc.main = "" then
+    print "[error] section [main] is required in yoarfile"
+    return 0
+  end if
+
+  yc.sources(0) = yc.main
+
   dim as ubyte of = freefile
 
   if open("makefile" for output as #of) <> 0 then

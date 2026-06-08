@@ -60,6 +60,8 @@ function parse_yoar_file(filename as string, config as YoarConfig) as Integer
       this case handles those section in which there
       are just values and no key-value pair
       '/
+      case "main"
+        config.main = ln
       case "sources"
         config.sources(config.source_count) = ln
         config.source_count += 1

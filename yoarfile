@@ -1,5 +1,3 @@
-# MyApp build config
-
 [project]
 name    = yoar
 output  = bin
@@ -7,8 +5,10 @@ output  = bin
 [compiler]
 fbc  = fbc
 
-[sources]
+[main]
 src/main.bas
+
+[sources]
 src/utils.bas
 src/parser.bas
 src/scanner.bas
