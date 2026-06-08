@@ -1,5 +1,5 @@
 CC = fbc
-SOURCES = src/main.bas src/scanner.bas src/utils.bas src/parser.bas src/generator.bas
+SOURCES = src/main.bas src/scanner.bas src/utils.bas src/parser.bas src/generator.bas src/init.bas
 INCLUDES = -i inc
 FLAGS = -g -w all -exx
 OUTPUT = bin/yoar
