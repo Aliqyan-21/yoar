@@ -30,12 +30,16 @@ make
 > yoar binary will be built in 'bin' directory
 
 3. **Usage**
-```
+```bash
 ./yoar --help
 ```
 
 4. **Write yoarfile**
-Take a look at [example](example/yoarfile) to see sample yoarfile
+Take a look at [example](example/yoarfile) to see sample yoarfile or just do:
+
+```bash
+yoar --init
+```
 
 ### Todo
 
