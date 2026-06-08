@@ -37,4 +37,4 @@ Type YoarConfig
   post_build as string
 end type
 
-declare function parse_yoar_file(filename as string, config as YoarConfig) as Integer
+declare function parse_yoar_file(filename as string, config as YoarConfig, base_dir as string) as Integer

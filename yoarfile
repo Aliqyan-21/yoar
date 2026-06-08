@@ -9,11 +9,7 @@ fbc  = fbc
 src/main.bas
 
 [sources]
-src/utils.bas
-src/parser.bas
-src/scanner.bas
-src/generator.bas
-src/init.bas
+src/*.bas
 
 [includes]
 inc

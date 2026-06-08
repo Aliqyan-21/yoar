@@ -7,9 +7,12 @@ const template as string = _
     !"[compiler]\n" _
     !"# path to fbc, default is 'fbc' (uses $PATH)\n" _
     !"fbc  = fbc\n\n" _
-    !"# note: always keep your main file first\n" _
-    !"[sources]\n" _
+    !"# note: main section is required section\n" _
+    !"[main]\n" _
     !"src/main.bas\n\n" _
+    !"# note: you can use globs like \"src/*.bas\" | \"external/_line/*.bas\"\n" _
+    !"[sources]\n" _
+    !"src/utils.bas\n\n" _
     !"# optional: include directories and .bi files\n" _
     !"[includes]\n" _
     !"include/\n\n" _
