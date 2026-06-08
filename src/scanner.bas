@@ -7,7 +7,7 @@ function scan_includes(filepath as string, fbc as string, includes_flags as stri
   dim tmpo as string = ".yoar_tmp.o"
 
   shell fbc & " -showincludes " & includes_flags _
-    & " -c " & filepath & " -o /tmp/yoar_tmp.o > " & tmpo & " 2>&1"
+    & " -c " & filepath & " -o tmpo > " & tmp & " 2>&1"
 
   dim inf as ubyte = freefile
   if open(tmp for input as #inf) <> 0 then return sp
