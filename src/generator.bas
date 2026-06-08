@@ -6,7 +6,7 @@ function generate_makefile(yoarfile_path as string, base_dir as string, target a
   dim yc as YoarConfig
   dim res as integer
 
-  res = parse_yoar_file(yoarfile_path, yc)
+  res = parse_yoar_file(yoarfile_path, yc, base_dir)
 
   if res = 0 then
     print "parse failed"
@@ -14,6 +14,13 @@ function generate_makefile(yoarfile_path as string, base_dir as string, target a
   end if
 
   print "parsed successfully"
+
+  if yc.main = "" then
+    print "[error] section [main] is required in yoarfile"
+    return 0
+  end if
+
+  yc.sources(0) = yc.main
 
   dim as ubyte of = freefile
 

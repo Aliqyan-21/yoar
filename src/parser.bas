@@ -1,6 +1,6 @@
 #include "parser.bi"
 
-function parse_yoar_file(filename as string, config as YoarConfig) as Integer
+function parse_yoar_file(filename as string, config as YoarConfig, base_dir as string) as Integer
   dim cfg as ubyte
   cfg = freefile
   err = open(filename for input as #cfg)
@@ -60,9 +60,29 @@ function parse_yoar_file(filename as string, config as YoarConfig) as Integer
       this case handles those section in which there
       are just values and no key-value pair
       '/
+      case "main"
+        config.main = ln
       case "sources"
-        config.sources(config.source_count) = ln
-        config.source_count += 1
+        if instr(ln, "*") > 0 then
+          var pp = base_dir & "/" & ln
+          dim just_dir as string = left(ln, instrrev(ln, "/")) ' src/*.bas => src
+          dim f as string = dir(pp)
+          if f = "" then
+            print "[warning] no files matched: " & ln
+          end if
+          do while f <> ""
+            if (just_dir & f) <> config.main then
+              config.sources(config.source_count) = just_dir & f
+              config.source_count +=1
+            end if
+            f = dir()
+          loop
+        else
+          if ln <> config.main then
+            config.sources(config.source_count) = ln
+            config.source_count += 1
+          end if
+        end if
       case "includes"
         config.includes(config.include_count) = ln
         config.include_count += 1

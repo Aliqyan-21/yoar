@@ -5,12 +5,15 @@ Type YoarConfig
   proj_name as string = "main"
   proj_output as string = "."
 
+  ' [main]
+  main as string ' required
+
   ' [compiler]
   fbc as string = "fbc"
 
   ' [sources] // fixed array is there for now
   sources(64) as string
-  source_count as integer = 0
+  source_count as integer = 1
 
   ' [includes]
   includes(64) as string
@@ -29,10 +32,9 @@ Type YoarConfig
   release as string
   test as string
 
-
   ' [hooks]
   pre_build as string
   post_build as string
 end type
 
-declare function parse_yoar_file(filename as string, config as YoarConfig) as Integer
+declare function parse_yoar_file(filename as string, config as YoarConfig, base_dir as string) as Integer
