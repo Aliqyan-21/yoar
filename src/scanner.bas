@@ -16,16 +16,29 @@ function resolve_include_in_dir(filename as string, search_dir as string) as str
   var f = search_dir & "/" & filename
   if dir(f) <> "" then return f end if
 
-  dim subdirs(64) as string
+  dim subdirs() as string
   var subdir_count = 0
+  var curr_cap = 0 ' capacity of subdirs()
+  const CHUNK_SIZE = 32 '' increase array by this much size, everytime its filled
+
   var subdir = dir(search_dir & "/*", fbDirectory)
   do while subdir <> ""
     if subdir <> "." and subdir <> ".." then
+      if subdir_count >= curr_cap then
+        curr_cap += CHUNK_SIZE
+        redim preserve subdirs(curr_cap - 1)
+      end if
       subdirs(subdir_count) = subdir
       subdir_count += 1
     end if
     subdir = dir()
   loop
+
+  if subdir_count > 0 then
+    redim preserve subdirs(subdir_count - 1)
+  else
+    erase subdirs
+  end if
 
   for i as integer = 0 to subdir_count - 1
     var found = resolve_include_in_dir(filename, search_dir & "/" & subdirs(i))
