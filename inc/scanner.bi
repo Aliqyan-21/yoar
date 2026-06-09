@@ -3,4 +3,4 @@ type ScanPut
   include_count as integer = 0
 end type
 
-declare function scan_includes(filepath as string, fbc as string, includes_flags as string) as ScanPut
+declare function scan_includes(filepath as string, includes() as string, include_count as integer, base_dir as string) as ScanPut

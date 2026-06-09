@@ -116,11 +116,7 @@ function generate_makefile(yoarfile_path as string, base_dir as string, target a
     var obj = "obj/" & basename(yc.sources(i)) & ".o"
 
     '' rule with include dependency ''
-    var includes_flags = ""
-    for j as integer = 0 to yc.include_count - 1
-      includes_flags &= "-i " & base_dir & "/" & yc.includes(j) & " "
-    next
-    var sp = scan_includes(src, yc.fbc, includes_flags)
+    var sp = scan_includes(src, yc.includes(), yc.include_count, base_dir)
 
     var current = i + 1
     var total = yc.source_count
@@ -129,7 +125,7 @@ function generate_makefile(yoarfile_path as string, base_dir as string, target a
     do while len(pct) < 4
       pct = " " & pct
     loop
-    var progress = "[" & pct & "]"
+    var progress = "[" & pct & "%]"
     ' var progress = "[" & str(current) &  "/" & str(total) & "]"
 
     print #of, obj & ": " & src;
