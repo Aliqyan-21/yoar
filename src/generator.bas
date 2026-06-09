@@ -125,7 +125,7 @@ function generate_makefile(yoarfile_path as string, base_dir as string, target a
     do while len(pct) < 4
       pct = " " & pct
     loop
-    var progress = "[" & pct & "]"
+    var progress = "[" & pct & "%]"
     ' var progress = "[" & str(current) &  "/" & str(total) & "]"
 
     print #of, obj & ": " & src;
