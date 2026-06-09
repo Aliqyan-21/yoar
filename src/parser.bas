@@ -72,6 +72,10 @@ function parse_yoar_file(filename as string, config as YoarConfig, base_dir as s
           end if
           do while f <> ""
             if (just_dir & f) <> config.main then
+              if config.source_count >= config.source_cap then
+                config.source_cap += CHUNK_SIZE
+                redim preserve config.sources(config.source_cap - 1)
+              end if
               config.sources(config.source_count) = just_dir & f
               config.source_count +=1
             end if
@@ -84,12 +88,24 @@ function parse_yoar_file(filename as string, config as YoarConfig, base_dir as s
           end if
         end if
       case "includes"
+        if config.include_count >= config.include_cap then
+          config.include_cap += CHUNK_SIZE
+          redim preserve config.includes(config.include_cap - 1)
+        end if
         config.includes(config.include_count) = ln
         config.include_count += 1
       case "libs"
+        if config.lib_count >= config.lib_cap then
+          config.lib_cap += CHUNK_SIZE
+          redim preserve config.libs(config.lib_cap - 1)
+        end if
         config.libs(config.lib_count) = ln
         config.lib_count += 1
       case "links"
+        if config.link_count >= config.link_cap then
+          config.link_cap += CHUNK_SIZE
+          redim preserve config.links(config.link_cap - 1)
+        end if
         config.links(config.link_count) = ln
         config.link_count += 1
     end select
