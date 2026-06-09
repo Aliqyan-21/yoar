@@ -19,7 +19,6 @@ function resolve_include_in_dir(filename as string, search_dir as string) as str
   dim subdirs() as string
   var subdir_count = 0
   var curr_cap = 0 ' capacity of subdirs()
-  const CHUNK_SIZE = 32 '' increase array by this much size, everytime its filled
 
   var subdir = dir(search_dir & "/*", fbDirectory)
   do while subdir <> ""
@@ -101,6 +100,10 @@ sub scan_file_recursive(filepath as string, includes() as string, include_count 
       end if
     next
     if not already then
+      if sp.include_count >= sp.include_cap then
+        sp.include_cap += CHUNK_SIZE
+        redim preserve sp.includes(sp.include_cap - 1)
+      end if
       sp.includes(sp.include_count) = full_path
       sp.include_count += 1
       if lcase(right(full_path, 3)) = ".bi" then
